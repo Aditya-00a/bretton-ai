@@ -1,22 +1,27 @@
 :root {
-  --bg: #070b10;
-  --surface: #0d141d;
-  --surface-soft: rgba(255, 255, 255, 0.045);
-  --border: rgba(195, 215, 235, 0.12);
-  --text-primary: #eef6ff;
-  --text-secondary: #b7c6d8;
-  --text-muted: #8090a3;
-  --accent-blue: #50a9ff;
-  --accent-green: #3ad39f;
-  --accent-amber: #f2b64b;
-  --accent-red: #ff6666;
-  --shadow: 0 18px 70px rgba(0, 0, 0, 0.34);
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-soft: #f6fbfc;
+  --surface-tint: #ebeffa;
+  --ink: #0f172a;
+  --ink-soft: #475167;
+  --ink-muted: #697797;
+  --border: #e4e7ec;
+  --border-strong: #c8d4f1;
+  --brand-green: #248668;
+  --brand-green-soft: #41a184;
+  --brand-blue: #1e51f7;
+  --brand-blue-soft: #4d65ff;
+  --warning: #b7791f;
+  --danger: #b42318;
+  --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
   --font-sans:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    Geist, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
   --font-mono:
     'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 
-  color: var(--text-primary);
+  color: var(--ink);
   background: var(--bg);
   font-family: var(--font-sans);
   font-synthesis: none;
@@ -34,12 +39,8 @@ html {
   min-width: 320px;
   min-height: 100%;
   background:
-    linear-gradient(rgba(80, 169, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(80, 169, 255, 0.045) 1px, transparent 1px),
-    radial-gradient(circle at 12% 5%, rgba(58, 211, 159, 0.13), transparent 30%),
-    radial-gradient(circle at 90% 16%, rgba(80, 169, 255, 0.11), transparent 32%),
+    linear-gradient(180deg, rgba(235, 239, 250, 0.86), rgba(250, 250, 249, 0.5) 34rem),
     var(--bg);
-  background-size: 34px 34px, 34px 34px, auto, auto, auto;
 }
 
 body {
@@ -59,9 +60,13 @@ button {
   letter-spacing: 0;
 }
 
+a {
+  color: inherit;
+}
+
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid var(--brand-blue);
   outline-offset: 3px;
 }
 
@@ -70,6 +75,6 @@ a:focus-visible {
 }
 
 ::selection {
-  background: rgba(58, 211, 159, 0.28);
-  color: var(--text-primary);
+  background: rgba(36, 134, 104, 0.2);
+  color: var(--ink);
 }

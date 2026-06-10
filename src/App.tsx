@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
   BadgeCheck,
@@ -470,7 +470,8 @@ const priorityClass: Record<Scenario['priority'], string> = {
 
 function App() {
   const [selectedId, setSelectedId] = useState(scenarios[0].id)
-  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle')
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'selected'>('idle')
+  const memoRef = useRef<HTMLPreElement>(null)
 
   const selectedScenario = useMemo(
     () => scenarios.find((scenario) => scenario.id === selectedId) ?? scenarios[0],
@@ -497,6 +498,7 @@ function App() {
       textArea.select()
 
       try {
+        textArea.setSelectionRange(0, textArea.value.length)
         didCopy = document.execCommand('copy')
       } catch {
         didCopy = false
@@ -505,25 +507,67 @@ function App() {
       }
     }
 
-    setCopyState(didCopy ? 'copied' : 'error')
+    if (!didCopy && memoRef.current) {
+      const selection = window.getSelection()
+      const range = document.createRange()
+      range.selectNodeContents(memoRef.current)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+    }
+
+    setCopyState(didCopy ? 'copied' : 'selected')
     window.setTimeout(() => setCopyState('idle'), 1800)
   }
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div>
-          <p className="eyebrow">Day 8 / Bretton AI concept</p>
-          <h1>SanctionLens</h1>
-          <p className="subtitle">Sanctions alert investigation agent</p>
+      <header className="site-nav" aria-label="Bretton-style navigation">
+        <div className="brand-lockup">
+          <span className="brand-mark" aria-hidden="true">
+            B
+          </span>
+          <span>Bretton AI</span>
         </div>
-        <div className="topbar-actions" aria-label="Product posture">
-          <span className="badge">AML</span>
-          <span className="badge">KYC</span>
-          <span className="badge">Sanctions</span>
-          <span className="badge badge-strong">Audit-ready memo</span>
+        <nav className="nav-links" aria-label="Primary">
+          <a href="https://www.bretton.com/product">Product</a>
+          <a href="https://www.bretton.com/company">Company</a>
+          <a href="https://www.bretton.com/careers">Careers</a>
+          <a href="https://www.bretton.com/blog">Resources</a>
+        </nav>
+        <div className="nav-actions">
+          <a className="nav-button nav-button-outline" href="https://app.bretton.com">
+            Sign in
+          </a>
+          <a className="nav-button nav-button-theme" href="https://www.bretton.com/book-demo">
+            Book a demo
+          </a>
         </div>
       </header>
+
+      <section className="hero-band">
+        <div className="hero-copy">
+          <p className="eyebrow">Sanctions, PEP, and adverse media</p>
+          <h1>SanctionLens</h1>
+          <p className="subtitle">
+            A Bretton-style screening alert agent that prepares evidence, routing, and an
+            audit-ready analyst memo inside the existing compliance workflow.
+          </p>
+        </div>
+        <div className="hero-proof" aria-label="Bretton-style proof metrics">
+          <div>
+            <strong>94%</strong>
+            <span>Audit readiness</span>
+          </div>
+          <div>
+            <strong>4</strong>
+            <span>Mock alert workflows</span>
+          </div>
+          <div>
+            <strong>L1 + L2</strong>
+            <span>Review support</span>
+          </div>
+        </div>
+      </section>
 
       <section className="command-strip" aria-label="SanctionLens workflow">
         <div className="command-copy">
@@ -534,8 +578,8 @@ function App() {
           <span>Investigation package out</span>
         </div>
         <p>
-          Reviews screening alerts, compares evidence, recommends routing, and drafts a memo for
-          human analyst review.
+          Trusted by regulated-workflow design patterns: evidence first, human review always, and
+          every recommendation backed by traceable rationale.
         </p>
       </section>
 
@@ -708,11 +752,11 @@ function App() {
                   <Copy size={17} aria-hidden="true" />
                 )}
                 <span>
-                  {copyState === 'copied' ? 'Copied' : copyState === 'error' ? 'Retry' : 'Copy'}
+                  {copyState === 'copied' ? 'Copied' : copyState === 'selected' ? 'Selected' : 'Copy'}
                 </span>
               </button>
             </div>
-            <pre>{selectedScenario.memo}</pre>
+            <pre ref={memoRef}>{selectedScenario.memo}</pre>
           </section>
         </aside>
       </section>
